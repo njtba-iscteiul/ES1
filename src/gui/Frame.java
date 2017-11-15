@@ -27,6 +27,8 @@ public class Frame {
 		
 		addComponents();
 		
+		System.out.println("teste");
+		
 	}
 
 	private void addComponents() {
