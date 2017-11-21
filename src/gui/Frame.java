@@ -129,6 +129,44 @@ public class Frame {
 		manualInformation.add(manualLabelFS);
 		manualInformation.add(counter);
 		manualInformation.add(manualSave);
+		
+		//Automatic
+		
+				JPanel automaticPanel = new JPanel();
+				automaticPanel.setLayout(new BorderLayout());
+				rulesPanel.add(automaticPanel);
+				
+				JLabel automaticLabel = new JLabel("Automatic Configuration");
+				
+				JScrollPane automatic = new JScrollPane();
+				automatic.setSize(100, 400);
+				
+				JScrollPane automaticRules = new JScrollPane();
+				automaticRules.setPreferredSize(new Dimension(40,0));
+
+				automaticPanel.add(automaticLabel, BorderLayout.NORTH);
+				automaticPanel.add(automatic, BorderLayout.CENTER);
+				automaticPanel.add(automaticRules, BorderLayout.EAST);
+				
+				//Automatic Information
+				
+				JPanel automaticInformation = new JPanel();
+				automaticInformation.setLayout(new GridLayout(2,2,10,0));
+				automaticPanel.add(automaticInformation, BorderLayout.SOUTH);
+				
+				int automaticCounterFN = 0;
+				int automaticCounterFS = 0;
+				
+				JLabel automaticFN = new JLabel("False Negative: " + String.valueOf(automaticCounterFN));
+				JLabel automaticFS = new JLabel("False Positive: " + String.valueOf(automaticCounterFS));
+				
+				JButton automaticGenerate = new JButton("Gerar");
+				JButton automaticSave = new JButton("Gravar");
+				
+				automaticInformation.add(automaticFN);
+				automaticInformation.add(automaticFS);
+				automaticInformation.add(automaticGenerate);
+				automaticInformation.add(automaticSave);
 	}
 
 	public void init() {
