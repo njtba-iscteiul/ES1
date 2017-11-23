@@ -5,6 +5,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+
 public class ButtonAction {
 
 	private JTextField searchDirectory;
@@ -26,9 +27,10 @@ public class ButtonAction {
         }
         
         lf = new LeitorDeFicheiro();
-        lf.createTables(searchDirectory);
+        lf.createTables(searchDirectory);   
         
 	}
+	
 	
 	public JTextField getSearchDirectory(){
 		return searchDirectory;
