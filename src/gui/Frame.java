@@ -55,11 +55,17 @@ public class Frame {
 		JButton spamButton = new JButton("Procurar...");
 		JButton hamButton = new JButton("Procurar...");
 		
+		JScrollPane manual = new JScrollPane();
+		JScrollPane automatic = new JScrollPane();
+		
 		searchButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				buttonAction.searchFile(fileDirectory);
+				
+				manual.setViewportView(buttonAction.getManualTable());
+				automatic.setViewportView(buttonAction.getAutomaticTable());
 			}
 		});
 		
@@ -101,14 +107,8 @@ public class Frame {
 		
 		JLabel manualLabel = new JLabel("Manual Configuration");
 		
-		JScrollPane manual = new JScrollPane();
-		
-		JScrollPane manualRules = new JScrollPane();
-		manualRules.setPreferredSize(new Dimension(40,0));
-		
 		manualPanel.add(manualLabel, BorderLayout.NORTH);
 		manualPanel.add(manual, BorderLayout.CENTER);
-		manualPanel.add(manualRules, BorderLayout.EAST);
 		
 		//Manual Information
 		
@@ -132,41 +132,34 @@ public class Frame {
 		
 		//Automatic
 		
-				JPanel automaticPanel = new JPanel();
-				automaticPanel.setLayout(new BorderLayout());
-				rulesPanel.add(automaticPanel);
-				
-				JLabel automaticLabel = new JLabel("Automatic Configuration");
-				
-				JScrollPane automatic = new JScrollPane();
-				automatic.setSize(100, 400);
-				
-				JScrollPane automaticRules = new JScrollPane();
-				automaticRules.setPreferredSize(new Dimension(40,0));
+		JPanel automaticPanel = new JPanel();
+		automaticPanel.setLayout(new BorderLayout());
+		rulesPanel.add(automaticPanel);
+		
+		JLabel automaticLabel = new JLabel("Automatic Configuration");
 
-				automaticPanel.add(automaticLabel, BorderLayout.NORTH);
-				automaticPanel.add(automatic, BorderLayout.CENTER);
-				automaticPanel.add(automaticRules, BorderLayout.EAST);
-				
-				//Automatic Information
-				
-				JPanel automaticInformation = new JPanel();
-				automaticInformation.setLayout(new GridLayout(2,2,10,0));
-				automaticPanel.add(automaticInformation, BorderLayout.SOUTH);
-				
-				int automaticCounterFN = 0;
-				int automaticCounterFS = 0;
-				
-				JLabel automaticFN = new JLabel("False Negative: " + String.valueOf(automaticCounterFN));
-				JLabel automaticFS = new JLabel("False Positive: " + String.valueOf(automaticCounterFS));
-				
-				JButton automaticGenerate = new JButton("Gerar");
-				JButton automaticSave = new JButton("Gravar");
-				
-				automaticInformation.add(automaticFN);
-				automaticInformation.add(automaticFS);
-				automaticInformation.add(automaticGenerate);
-				automaticInformation.add(automaticSave);
+		automaticPanel.add(automaticLabel, BorderLayout.NORTH);
+		automaticPanel.add(automatic, BorderLayout.CENTER);
+		
+		//Automatic Information
+		
+		JPanel automaticInformation = new JPanel();
+		automaticInformation.setLayout(new GridLayout(2,2,10,0));
+		automaticPanel.add(automaticInformation, BorderLayout.SOUTH);
+		
+		int automaticCounterFN = 0;
+		int automaticCounterFS = 0;
+		
+		JLabel automaticFN = new JLabel("False Negative: " + String.valueOf(automaticCounterFN));
+		JLabel automaticFS = new JLabel("False Positive: " + String.valueOf(automaticCounterFS));
+		
+		JButton automaticGenerate = new JButton("Gerar");
+		JButton automaticSave = new JButton("Gravar");
+		
+		automaticInformation.add(automaticFN);
+		automaticInformation.add(automaticFS);
+		automaticInformation.add(automaticGenerate);
+		automaticInformation.add(automaticSave);
 	}
 
 	public void init() {
