@@ -4,10 +4,13 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -18,6 +21,11 @@ import funcionalities.ButtonAction;
 public class Frame {
 	
 	JFrame frame;
+	
+	private int manualCounterFN;
+	private int manualCounterFP;
+	//private JLabel manualLabelFN;
+	//private JLabel manualLabelFP;
 	
 	public Frame(){
 		
@@ -46,10 +54,13 @@ public class Frame {
 		JLabel hamLabel = new JLabel("Ham: ");
 		
 		JTextField fileDirectory = new JTextField();
+		fileDirectory.setName("rules.cf");
 		
 		JTextField spamDirectory = new JTextField();
+		spamDirectory.setName("spam.log");
 		
 		JTextField hamDirectory = new JTextField();
+		hamDirectory.setName("ham.log");
 		
 		JButton searchButton = new JButton("Procurar...");
 		JButton spamButton = new JButton("Procurar...");
@@ -62,10 +73,59 @@ public class Frame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				buttonAction.searchFile(fileDirectory);
 				
 				manual.setViewportView(buttonAction.getManualTable());
 				automatic.setViewportView(buttonAction.getAutomaticTable());
+				
+				buttonAction.getManualTable().addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						
+						int c = buttonAction.getManualTable().getSelectedColumn();
+						int l = buttonAction.getManualTable().getSelectedRow();
+						String valor = null;
+						
+						if(buttonAction.getManualTable().isColumnSelected(1)){
+							valor = new JOptionPane().showInputDialog("Digite um valor (entre -5.0 e 5.0): ", 0.0);
+
+							if(valor != null){
+								try {
+									while(Double.parseDouble(valor) < -5.0 || Double.parseDouble(valor) > 5.0){
+										valor = new JOptionPane().showInputDialog("Digite um valor (entre -5.0 e 5.0): ", 0.0);
+									}
+									
+									buttonAction.getManualTable().setValueAt(Double.parseDouble(valor), l, c);
+								} catch (Exception e2) {
+									System.out.println("Nao é um double");
+								}
+							}
+						}
+					}
+					
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub	
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+					}
+				});
 			}
 		});
 		
@@ -116,17 +176,35 @@ public class Frame {
 		manualInformation.setLayout(new GridLayout(2,2,10,0));
 		manualPanel.add(manualInformation, BorderLayout.SOUTH);
 		
-		int manualCounterFN = 0;
-		int manualCounterFS = 0;
-		
-		JLabel manualLabelFN = new JLabel("False Negative: " + String.valueOf(manualCounterFN));
-		JLabel manualLabelFS = new JLabel("False Positive: " + String.valueOf(manualCounterFS));
+		manualCounterFN = 0;
+		manualCounterFP = 0;
+
+		JLabel manualLabelFN = new JLabel("False Negative: " + manualCounterFN);
+		JLabel manualLabelFP = new JLabel("False Positive: " + manualCounterFP);
 		
 		JButton counter = new JButton("Avaliar Qualidade");
 		JButton manualSave = new JButton("Gravar");
 		
+		counter.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+		});
+		
+		manualSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				buttonAction.Save(fileDirectory, buttonAction.getManualTable());	
+			}
+		});
+		
 		manualInformation.add(manualLabelFN);
-		manualInformation.add(manualLabelFS);
+		manualInformation.add(manualLabelFP);
 		manualInformation.add(counter);
 		manualInformation.add(manualSave);
 		
@@ -148,18 +226,30 @@ public class Frame {
 		automaticPanel.add(automaticInformation, BorderLayout.SOUTH);
 		
 		int automaticCounterFN = 0;
-		int automaticCounterFS = 0;
+		int automaticCounterFP = 0;
 		
 		JLabel automaticFN = new JLabel("False Negative: " + String.valueOf(automaticCounterFN));
-		JLabel automaticFS = new JLabel("False Positive: " + String.valueOf(automaticCounterFS));
+		JLabel automaticFP = new JLabel("False Positive: " + String.valueOf(automaticCounterFP));
 		
 		JButton automaticGenerate = new JButton("Gerar");
 		JButton automaticSave = new JButton("Gravar");
 		
+		automaticSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				buttonAction.Save(fileDirectory, buttonAction.getAutomaticTable());
+			}
+		});
+		
 		automaticInformation.add(automaticFN);
-		automaticInformation.add(automaticFS);
+		automaticInformation.add(automaticFP);
 		automaticInformation.add(automaticGenerate);
 		automaticInformation.add(automaticSave);
+		
+		//-----//
+		
 	}
 
 	public void init() {

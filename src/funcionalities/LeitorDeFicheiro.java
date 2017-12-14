@@ -10,7 +10,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-
 public class LeitorDeFicheiro {
 
 	private ArrayList<Rule> rulesList = new ArrayList<Rule>();
@@ -20,7 +19,6 @@ public class LeitorDeFicheiro {
 	private JTable automaticTable;
 
 	public void createTables(JTextField searchDirectory) {
-
 
 		defaultManualTable = new DefaultTableModel() {
 			@Override
@@ -45,11 +43,8 @@ public class LeitorDeFicheiro {
 
 		defaultAutomaticTable.addColumn("Rules");
 		defaultAutomaticTable.addColumn("Weight");
-
-		String directory = searchDirectory.getText();
-		System.out.println(directory);
-
-		File f = new File(directory);
+		
+		File f = new File(searchDirectory.getText());
 
 		Scanner sc = null;
 		PrintWriter writer = null;
@@ -57,25 +52,45 @@ public class LeitorDeFicheiro {
 
 		try {
 			sc = new Scanner(f);
-			writer = new PrintWriter(f.getName());
+			if(!(searchDirectory.getText().equals("./rules.cf"))){
+				writer = new PrintWriter(f.getName());
+			}
 		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
+			System.out.println("");
 		}
 
+		
+		try{
+		
 		while(sc.hasNextLine()){
 			String linha = sc.nextLine();
 			String[] tokens = linha.split(" ");
 
 			String ruleName = tokens[0];
-
-			writer.append(linha + " 0.0\n" );
-			Rule r = new Rule(ruleName,0.0);
+			Rule r;
+			
+			
+			if(!(searchDirectory.getText().equals("./rules.cf"))){
+				writer.append(linha + " 0.0\n" );
+				r = new Rule(ruleName, 0.0);
+				
+			}
+			else{
+				double weight = Double.parseDouble(tokens[1]);
+				r = new Rule(ruleName, weight);
+			}
+			
 			rulesList.add(r);
 			fillTable(r);
 		}
+		} catch (Exception e) {
+			System.out.println("");
+		}
 
 		sc.close();
-		writer.close();
+		if(!(searchDirectory.getText().equals("./rules.cf"))){
+			writer.close();
+		}
 	}
 
 	public void fillTable(Rule r) {
@@ -83,7 +98,14 @@ public class LeitorDeFicheiro {
 		defaultAutomaticTable.addRow(new Object[] {r.getName(),r.getWeight()});
 	}
 
+	public ArrayList<Rule> getRulesList(){
+		return rulesList;
+	}
 
+	public DefaultTableModel getDefaultManualTable(){
+		return defaultManualTable;
+	}
+	
 	public JTable getManualTable(){
 		return manualTable;
 	}
