@@ -24,6 +24,8 @@ public class Frame {
 	
 	private int manualCounterFN;
 	private int manualCounterFP;
+	private int automaticCounterFN;
+	private int automaticCounterFP;
 	//private JLabel manualLabelFN;
 	//private JLabel manualLabelFP;
 	
@@ -75,6 +77,9 @@ public class Frame {
 			public void actionPerformed(ActionEvent e) {
 				
 				buttonAction.searchFile(fileDirectory);
+				
+				buttonAction.setManualTable(buttonAction.getManualTable());
+				buttonAction.setAutomaticTable(buttonAction.getAutomaticTable());
 				
 				manual.setViewportView(buttonAction.getManualTable());
 				automatic.setViewportView(buttonAction.getAutomaticTable());
@@ -189,7 +194,14 @@ public class Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				
+				buttonAction.gerar(buttonAction.getManualTable(), spamDirectory.getText(), hamDirectory.getText(), counter);
+				
+				manualCounterFN = buttonAction.getCounterFN();
+				manualCounterFP = buttonAction.getCounterFP();
+			
+				manualLabelFN.setText("False Negative: " + manualCounterFN);
+				manualLabelFP.setText("False Positive: " + manualCounterFP);
 				
 			}
 
@@ -199,7 +211,7 @@ public class Frame {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				buttonAction.Save(fileDirectory, buttonAction.getManualTable());	
+				buttonAction.save(fileDirectory, buttonAction.getManualTable());	
 			}
 		});
 		
@@ -225,8 +237,8 @@ public class Frame {
 		automaticInformation.setLayout(new GridLayout(2,2,10,0));
 		automaticPanel.add(automaticInformation, BorderLayout.SOUTH);
 		
-		int automaticCounterFN = 0;
-		int automaticCounterFP = 0;
+		automaticCounterFN = 0;
+		automaticCounterFP = 0;
 		
 		JLabel automaticFN = new JLabel("False Negative: " + String.valueOf(automaticCounterFN));
 		JLabel automaticFP = new JLabel("False Positive: " + String.valueOf(automaticCounterFP));
@@ -234,12 +246,29 @@ public class Frame {
 		JButton automaticGenerate = new JButton("Gerar");
 		JButton automaticSave = new JButton("Gravar");
 		
+		automaticGenerate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				buttonAction.gerar(buttonAction.getAutomaticTable(), spamDirectory.getText(), hamDirectory.getText(), automaticGenerate);
+				
+				automaticCounterFN = buttonAction.getCounterFN();
+				automaticCounterFP = buttonAction.getCounterFP();
+			
+				automaticFN.setText("False Negative: " + automaticCounterFN);
+				automaticFP.setText("False Positive: " + automaticCounterFP);
+				
+				
+			}
+		});
+		
 		automaticSave.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				buttonAction.Save(fileDirectory, buttonAction.getAutomaticTable());
+				buttonAction.save(fileDirectory, buttonAction.getAutomaticTable());
 			}
 		});
 		

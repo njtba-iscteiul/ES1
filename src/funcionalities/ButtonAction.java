@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -16,7 +17,6 @@ import javax.swing.table.DefaultTableModel;
 
 import org.omg.CORBA.portable.ValueBase;
 
-
 public class ButtonAction {
 
 	private PrintWriter writer;
@@ -24,6 +24,8 @@ public class ButtonAction {
 	private LeitorDeFicheiro lf;
 	private int counterFN = 0;
 	private int counterFP = 0;
+	private JTable manualTable;
+	private JTable automaticTable;
 	
 	public void searchFile(JTextField searchDirectory) {
 		
@@ -42,6 +44,7 @@ public class ButtonAction {
 	 
 	        int rVal = fileChooser.showOpenDialog(null);
 	        
+	        //Escolher o ficheiro correcto
 	        if (rVal == JFileChooser.APPROVE_OPTION) {
 	        	
 	        	if(searchDirectory.getName().equals("rules.cf")){
@@ -87,7 +90,7 @@ public class ButtonAction {
 		}
 	}
 	
-	public void Save(JTextField fileDirectory, JTable table) {
+	public void save(JTextField fileDirectory, JTable table) {
 				
         File f = new File(fileDirectory.getText());
         
@@ -98,7 +101,7 @@ public class ButtonAction {
 			sc = new Scanner(f);
 			fw = new FileWriter(f);
 				
-			for(int j = 0 ; j < lf.getManualTable().getRowCount(); j++){
+			for(int j = 0 ; j < table.getRowCount(); j++){
 				fw.write(table.getValueAt(j,0) + " " + table.getValueAt(j, 1) + "\n");
 			}
 			
@@ -114,16 +117,45 @@ public class ButtonAction {
 		}
 	}
 	
+	public void gerar(JTable table, String spamDirectory, String hamDirectory, JButton button){
+
+		
+	}
+	
+	public void calculateFP(JTable table){
+		
+		
+	}
+	
+	public void calculateFN(JTable table){
+		
+
+	}
+	
 	public JTextField getSearchDirectory(){
 		return searchDirectory;
 	}
 
+	public void setManualTable(JTable table){
+		manualTable = table;
+	}
+	
+	public void setAutomaticTable(JTable table){
+		automaticTable = table;
+	}
+	
 	public JTable getManualTable(){
-		return lf.getManualTable();
+		if(manualTable == null)
+			return lf.getManualTable();
+	
+		return manualTable;
 	}
 	
 	public JTable getAutomaticTable(){
-		return lf.getAutomaticTable();
+		if(automaticTable == null)
+			return lf.getAutomaticTable();
+		
+		return automaticTable;
 	}
 	
 	public int getCounterFN(){

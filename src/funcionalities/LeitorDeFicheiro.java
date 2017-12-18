@@ -3,6 +3,7 @@ package funcionalities;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 public class LeitorDeFicheiro {
 
 	private ArrayList<Rule> rulesList = new ArrayList<Rule>();
+	private ArrayList<String> log = new ArrayList<String>();
 	private DefaultTableModel defaultManualTable;
 	private DefaultTableModel defaultAutomaticTable;
 	private JTable manualTable;
@@ -45,10 +47,9 @@ public class LeitorDeFicheiro {
 		defaultAutomaticTable.addColumn("Weight");
 		
 		File f = new File(searchDirectory.getText());
-
+		
 		Scanner sc = null;
 		PrintWriter writer = null;
-
 
 		try {
 			sc = new Scanner(f);
@@ -68,7 +69,6 @@ public class LeitorDeFicheiro {
 
 			String ruleName = tokens[0];
 			Rule r;
-			
 			
 			if(!(searchDirectory.getText().equals("./rules.cf"))){
 				writer.append(linha + " 0.0\n" );
@@ -92,6 +92,39 @@ public class LeitorDeFicheiro {
 			writer.close();
 		}
 	}
+	
+	public void lerFicheiroLog(String Directory){
+		
+		log = new ArrayList<String>();
+		
+		File f = new File(Directory);
+
+		Scanner sc;
+		String[] lineParts = null;
+				
+		try {
+			sc = new Scanner(f);
+			
+			while (sc.hasNextLine()) {
+				String line = sc.nextLine();
+				lineParts = line.split("	");
+				for(int i = 1; i < lineParts.length; i++){
+					
+					if(i == lineParts.length - 1){
+						String[] lineParts2 = lineParts[i].split(" ");
+						log.add(lineParts2[0]);
+						log.add(lineParts2[1]);
+					}
+					else{
+						log.add(lineParts[i]);
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 
 	public void fillTable(Rule r) {
 		defaultManualTable.addRow(new Object[] {r.getName(),r.getWeight()});
@@ -100,6 +133,10 @@ public class LeitorDeFicheiro {
 
 	public ArrayList<Rule> getRulesList(){
 		return rulesList;
+	}
+	
+	public ArrayList<String> getLog(){
+		return log;
 	}
 
 	public DefaultTableModel getDefaultManualTable(){
