@@ -52,6 +52,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 //	    	fx[1] += Math.abs(x[1]); // Example for testing
 //	    }
 	    
+	    System.out.println();
 	    ba.calculateFP(x);
 	    ba.calculateFN(x);
 	    int fp = ba.getCounterFP();

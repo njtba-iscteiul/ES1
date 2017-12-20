@@ -175,7 +175,7 @@ public class ButtonAction {
 		JTextField tf = new JTextField(f.getName());
 		lf.createTables(tf);
 		
-		System.out.println();
+		System.out.println("");
 		for(int i = 0; i < lf.getRulesList().size(); i++){
 			Rule rule = new Rule(lf.getRulesList().get(i).getName(), x[i]);
 			rulesList.add(rule);

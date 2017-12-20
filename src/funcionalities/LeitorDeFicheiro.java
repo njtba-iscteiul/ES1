@@ -138,6 +138,7 @@ public class LeitorDeFicheiro {
 		try {
 			sc = new Scanner(f);
 
+			System.out.println("");
 			String line = sc.nextLine();
 			parts = line.split(" ");
 			for(int i = 0; i < parts.length; i++){
