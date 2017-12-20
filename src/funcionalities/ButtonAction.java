@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.JButton;
@@ -30,6 +31,10 @@ public class ButtonAction {
 	private JTable automaticTable;
 	private File spam;
 	private File ham;
+	private ArrayList<Rule> rulesList;
+	private double contaHam = 0.0;
+	private double contaSpam = 0.0;
+	private AntiSpamFilterAutomaticConfiguration antiSpamFilter = new AntiSpamFilterAutomaticConfiguration();
 
 	public void searchFile(JTextField searchDirectory) {
 
@@ -133,75 +138,91 @@ public class ButtonAction {
 		if(button.getText().equals("Avaliar Qualidade")){
 			table = manualTable;
 			
-			lf.lerFicheiroLog(spamDirectory);
-
-			calculateFP(table);
-
-			lf.lerFicheiroLog(hamDirectory);
-
-			calculateFN(table);
+			//Criar Double[] x com os pesos;
+			
+//			lf.lerFicheiroLog(spamDirectory);
+//
+//			calculateFN(x);
+//
+//			lf.lerFicheiroLog(hamDirectory);
+//
+//			calculateFP(x);
 		}
 
 		if(button.getText().equals("Gerar")){
-			AntiSpamFilterAutomaticConfiguration antiSpamFilter = new AntiSpamFilterAutomaticConfiguration();
+			
 			try {
 				antiSpamFilter.init();
+				lf.lerValoresAutomatico();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+	
+			for (int i = 0; i < lf.getValores().size(); i++) {
+				
+				automaticTable.setValueAt(Double.parseDouble(lf.getValores().get(i)), i, 1);
+			}
+			
 			table = automaticTable;
 		}
-
+		
 	}
 
-	public void calculateFP(JTable table){
-		double contaSpam = 0.0;
-
-		for(int i = 0; i < lf.getLog().size(); i++){
-
-			if(!lf.getLog().get(i).equals("0.0")){
-				String rule = lf.getLog().get(i);
-
-				for(int j = 0; j < table.getRowCount(); j++){
-					if(rule.equals(table.getValueAt(j, 0))){
-						contaSpam += (double) table.getValueAt(j, 1);
-					}
-				}
-			}
-
-			else{
-				if(contaSpam < 0.0)
-					counterFP++;
-
-				contaSpam = 0.0;
-			}
+	public void calculateFP(double[] x){
+		contaHam = 0;
+		
+		File f = new File("./rules.cf");
+		JTextField tf = new JTextField(f.getName());
+		lf.createTables(tf);
+		
+		System.out.println();
+		for(int i = 0; i < lf.getRulesList().size(); i++){
+			Rule rule = new Rule(lf.getRulesList().get(i).getName(), x[i]);
+			rulesList.add(rule);
 		}
 
-
-
-	}
-
-	public void calculateFN(JTable table){
-
-		double contaHam = 0.0;
-
 		for(int i = 0; i < lf.getLog().size(); i++){
 
 			if(!lf.getLog().get(i).equals("0.0")){
 				String rule = lf.getLog().get(i);
 
-				for(int j = 0; j < table.getRowCount(); j++){
-					if(rule.equals(table.getValueAt(j, 0))){
-						contaHam += (double) table.getValueAt(j, 1);
+				for(int j = 0; j < x.length; j++){
+					if(rule.equals(rulesList.get(j))){
+						contaHam += (double) x[j];
 					}
 				}
 			}
 
 			else{
-				if(contaHam > 0.0)
+				if(contaHam > 5.0)
+					counterFP++;
+
+				contaHam = 0;
+			}
+		}
+	}
+
+	public void calculateFN(double[] x){
+
+		contaSpam = 0;
+		
+		for(int i = 0; i < lf.getLog().size(); i++){
+
+			if(!lf.getLog().get(i).equals("0.0")){
+				String rule = lf.getLog().get(i);
+
+				for(int j = 0; j < rulesList.size(); j++){
+					if(rule.equals(rulesList.get(j))){
+						contaSpam += (double) x[j];
+					}
+				}
+			}
+
+			else{
+				if(contaSpam < -5.0)
 					counterFN++;
 
-				contaHam = 0.0;
+				contaSpam = 0;
 			}
 		}
 	}
@@ -231,7 +252,7 @@ public class ButtonAction {
 
 		return automaticTable;
 	}
-
+	
 	public int getCounterFN(){
 		return counterFN;
 	}

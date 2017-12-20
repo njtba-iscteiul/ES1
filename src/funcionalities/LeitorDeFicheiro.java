@@ -15,6 +15,7 @@ public class LeitorDeFicheiro {
 
 	private ArrayList<Rule> rulesList = new ArrayList<Rule>();
 	private ArrayList<String> log = new ArrayList<String>();
+	private ArrayList<String> valores;
 	private DefaultTableModel defaultManualTable;
 	private DefaultTableModel defaultAutomaticTable;
 	private JTable manualTable;
@@ -125,6 +126,29 @@ public class LeitorDeFicheiro {
 			// TODO: handle exception
 		}
 	}
+	
+	public void lerValoresAutomatico(){
+		
+		File f = new File("./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.NSGAII.rs");
+		
+		Scanner sc;
+		valores = new ArrayList<>();
+		String[] parts;
+		
+		try {
+			sc = new Scanner(f);
+
+			String line = sc.nextLine();
+			parts = line.split(" ");
+			for(int i = 0; i < parts.length; i++){
+				valores.add(parts[i]);
+			}
+				
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
 
 	public void fillTable(Rule r) {
 		defaultManualTable.addRow(new Object[] {r.getName(),r.getWeight()});
@@ -137,6 +161,10 @@ public class LeitorDeFicheiro {
 	
 	public ArrayList<String> getLog(){
 		return log;
+	}
+	
+	public ArrayList<String> getValores(){
+		return valores;
 	}
 
 	public DefaultTableModel getDefaultManualTable(){
