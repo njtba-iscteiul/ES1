@@ -23,6 +23,12 @@ public class LeitorDeFicheiro {
 	private double fp = 0;
 	private double fn = 0;
 
+	/**
+	 * Cria tabelas para colocar na frame
+	 *
+	 * @param Descrição directoria ficheiro rules.cf
+	 * @return ....
+	 */
 	public void createTables(JTextField searchDirectory) {
 
 		defaultManualTable = new DefaultTableModel() {
@@ -96,6 +102,12 @@ public class LeitorDeFicheiro {
 		}
 	}
 	
+	/**
+	 * Cria arrayList com as regras dos ficheiros spam.log e ham.log
+	 *
+	 * @param Descrição directoria ficheiros
+	 * @return ....
+	 */
 	public void lerFicheiroLog(String Directory){
 		
 		log = new ArrayList<String>();
@@ -132,6 +144,11 @@ public class LeitorDeFicheiro {
 		
 	}
 	
+	/**
+	 * Cria arrayList com os pesos criados pelo jMetal
+	 *
+	 * @return ....
+	 */
 	public void lerValoresAutomatico(){
 		
 		File f = new File("./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.NSGAII.rf");
@@ -195,11 +212,22 @@ public class LeitorDeFicheiro {
 
 	}
 
+	/**
+	 * Preenche a tabela com a regra e o seu peso
+	 *
+	 * @param Descrição regra
+	 * @return ....
+	 */
 	public void fillTable(Rule r) {
 		defaultManualTable.addRow(new Object[] {r.getName(),r.getWeight()});
 		defaultAutomaticTable.addRow(new Object[] {r.getName(),r.getWeight()});
 	}
 	
+	/**
+	 * Cria arrayList com as regras e pesos do ficheiro rules.cf
+	 *
+	 * @return ....
+	 */
 	public void fillArray(){
 		
 		rulesList.clear();
@@ -222,34 +250,74 @@ public class LeitorDeFicheiro {
 		}
 	}
 
+	/**
+	 * Retorna arrayList com as regras e pesos
+	 *
+	 * @return arrayList
+	 */
 	public ArrayList<Rule> getRulesList(){
 		return rulesList;
 	}
 	
+	/**
+	 * Retorna arrayList com as regras do ficheiro spam.log ou ham.log
+	 *
+	 * @return arrayList
+	 */
 	public ArrayList<String> getLog(){
 		return log;
 	}
 	
+	/**
+	 * Retorna arrayList com os pesos gerados pelo jMetal
+	 *
+	 * @return arrayList
+	 */
 	public ArrayList<String> getValores(){
 		return valores;
 	}
 
+	/**
+	 * Retorna o modelo para a tabela manual
+	 *
+	 * @return DefaultTableModel
+	 */
 	public DefaultTableModel getDefaultManualTable(){
 		return defaultManualTable;
 	}
 	
+	/**
+	 * Retorna tabela manual
+	 *
+	 * @return JTable
+	 */
 	public JTable getManualTable(){
 		return manualTable;
 	}
 
+	/**
+	 * Retorna tabela automatica
+	 *
+	 * @return JTable
+	 */
 	public JTable getAutomaticTable(){
 		return automaticTable;
 	}
 	
+	/**
+	 * Retorna o valor do falso positivo
+	 *
+	 * @return double
+	 */
 	public double getFP(){
 		return fp;
 	}
 	
+	/**
+	 * Retorna o valor do falso negativo
+	 *
+	 * @return double
+	 */
 	public double getFN(){
 		return fn;
 	}

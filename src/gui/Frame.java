@@ -29,6 +29,11 @@ public class Frame {
 	//private JLabel manualLabelFN;
 	//private JLabel manualLabelFP;
 	
+	/**
+	 * Construtor da frame
+	 *
+	 * @return ....
+	 */
 	public Frame(){
 		
 		frame = new JFrame("Software ES");
@@ -41,6 +46,11 @@ public class Frame {
 		
 	}
 
+	/**
+	 * Cria a frame com os JTextField, JButton, JScrollPane, JLabel, ...
+	 *
+	 * @return ....
+	 */
 	private void addComponents() {
 		
 		JPanel searchPanel = new JPanel();
@@ -283,11 +293,21 @@ public class Frame {
 		
 	}
 
+	/**
+	 * Inicia a frame
+	 *
+	 * @return ....
+	 */
 	public void init() {
 		frame.setSize(800, 500);
 		frame.setVisible(true);
 	}
 	
+	/**
+	 * Retorna a frame
+	 *
+	 * @return JFrame
+	 */
 	public JFrame getFrame() {
 		return frame;
 	}

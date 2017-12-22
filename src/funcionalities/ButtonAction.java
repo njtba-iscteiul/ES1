@@ -36,6 +36,12 @@ public class ButtonAction {
 	private double contaSpam = 0.0;
 	private AntiSpamFilterAutomaticConfiguration antiSpamFilter = new AntiSpamFilterAutomaticConfiguration();
 
+	/**
+	 * Procura ficheiro no computador, caso ja tenhamos procurado uma vez os ficheiros ficam criados na pasta do projecto
+	 *
+	 * @param Descrição directoria ficheiros
+	 * @return ....
+	 */
 	public void searchFile(JTextField searchDirectory) {
 
 		this.searchDirectory = searchDirectory;
@@ -103,6 +109,12 @@ public class ButtonAction {
 		}
 	}
 
+	/**
+	 * Guarda as alterações efetuadas na tabela no ficheiro rules.cf
+	 *
+	 * @param Descrição directoria ficheiro e a tabela
+	 * @return ....
+	 */
 	public void save(JTextField fileDirectory, JTable table) {
 
 		File f = new File(fileDirectory.getText());
@@ -129,7 +141,13 @@ public class ButtonAction {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Gera os falsos positivos e falsos negativos
+	 *
+	 * @param Descrição Tabela e botão para diferencia configuração manual e automatica
+	 * @return ....
+	 */
 	public void gerar(JTable table, JButton button){
 
 		//counterFN = 0;
@@ -176,6 +194,13 @@ public class ButtonAction {
 		
 	}
 
+	
+	/**
+	 * Calcula os falsos positivos consoante os valores na tabela
+	 *
+	 * @param Descrição array com pesos das regras
+	 * @return ....
+	 */
 	public void calculateFP(double[] x){
 		
 		counterFP = 0;
@@ -214,6 +239,12 @@ public class ButtonAction {
 		}
 	}
 
+	/**
+	 * Calcula os falsos negativos consoante os valores na tabela
+	 *
+	 * @param Descrição array com pesos das regras
+	 * @return ....
+	 */
 	public void calculateFN(double[] x){
 
 		contaSpam = 0;
@@ -243,19 +274,41 @@ public class ButtonAction {
 			}
 		}
 	}
-
+	
+	/**
+	 * Retorna directoria do ficheiro
+	 *
+	 * @return JTextField com a directoria
+	 */
 	public JTextField getSearchDirectory(){
 		return searchDirectory;
 	}
-
+	
+	/**
+	 * Adiciona a tabela manual a uma JTable a null
+	 *
+	 * @param Descrição JTable manual
+	 * @return ....
+	 */
 	public void setManualTable(JTable table){
 		manualTable = table;
 	}
 
+	/**
+	 * Adiciona a tabela automatica a uma JTable a null
+	 *
+	 * @param Descrição JTable automatica
+	 * @return ....
+	 */
 	public void setAutomaticTable(JTable table){
 		automaticTable = table;
 	}
 
+	/**
+	 * Retorna a tabela manual
+	 *
+	 * @return JTable manual
+	 */
 	public JTable getManualTable(){
 		if(manualTable == null)
 			return lf.getManualTable();
@@ -263,6 +316,11 @@ public class ButtonAction {
 		return manualTable;
 	}
 
+	/**
+	 * Retorna a tabela automatica
+	 *
+	 * @return JTable automatica
+	 */
 	public JTable getAutomaticTable(){
 		if(automaticTable == null)
 			return lf.getAutomaticTable();
@@ -270,18 +328,38 @@ public class ButtonAction {
 		return automaticTable;
 	}
 	
+	/**
+	 * Retorna o valor do falso negativo
+	 *
+	 * @return int
+	 */
 	public int getCounterFN(){
 		return counterFN;
 	}
 
+	/**
+	 * Retorna o valor do falso positivo
+	 *
+	 * @return int
+	 */
 	public int getCounterFP(){
 		return counterFP;
 	}
 	
+	/**
+	 * Retorna o ficheiro spam.log
+	 *
+	 * @return File
+	 */
 	public File getSpam() {
 		return spam;
 	}
 	
+	/**
+	 * Retorna o ficheiro ham.log
+	 *
+	 * @return File
+	 */
 	public File getHam() {
 		return ham;
 	}
