@@ -60,7 +60,7 @@ public class LeitorDeFicheiro {
 				writer = new PrintWriter(f.getName());
 			}
 		} catch (FileNotFoundException e1) {
-			System.out.println("");
+
 		}
 
 		
@@ -87,7 +87,7 @@ public class LeitorDeFicheiro {
 			fillTable(r);
 		}
 		} catch (Exception e) {
-			System.out.println("");
+	
 		}
 
 		sc.close();
@@ -206,8 +206,10 @@ public class LeitorDeFicheiro {
 		
 		File f = new File("./rules.cf");
 		
+		Scanner sc;
+		
 		try {
-			Scanner sc = new Scanner(f);
+			sc = new Scanner(f);
 			while(sc.hasNextLine()){
 				String line = sc.nextLine();
 				String[] split = line.split(" ");

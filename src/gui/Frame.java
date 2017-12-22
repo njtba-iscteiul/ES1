@@ -287,5 +287,9 @@ public class Frame {
 		frame.setSize(800, 500);
 		frame.setVisible(true);
 	}
+	
+	public JFrame getFrame() {
+		return frame;
+	}
 
 }
