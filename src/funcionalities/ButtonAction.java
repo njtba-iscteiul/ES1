@@ -24,7 +24,7 @@ public class ButtonAction {
 
 	private PrintWriter writer;
 	private JTextField searchDirectory;
-	private LeitorDeFicheiro lf;
+	private LeitorDeFicheiro lf = new LeitorDeFicheiro();
 	private int counterFN = 0;
 	private int counterFP = 0;
 	private JTable manualTable;
@@ -130,29 +130,34 @@ public class ButtonAction {
 		}
 	}
 
-	public void gerar(JTable table, String spamDirectory, String hamDirectory, JButton button){
+	public void gerar(JTable table, JButton button){
 
-		counterFN = 0;
-		counterFP = 0;
+		//counterFN = 0;
+		//counterFP = 0;
 		
 		if(button.getText().equals("Avaliar Qualidade")){
 			table = manualTable;
+			double[] x = new double[335]; 
+
+			for (int i = 0; i < manualTable.getRowCount(); i++) {
+				x[i] = (double) manualTable.getValueAt(i, 1);
+			}
+
+
 			
-			//Criar Double[] x com os pesos;
-			
-//			lf.lerFicheiroLog(spamDirectory);
-//
-//			calculateFN(x);
-//
-//			lf.lerFicheiroLog(hamDirectory);
-//
-//			calculateFP(x);
+			//lf.lerFicheiroLog(spamDirectory);
+
+			calculateFP(x);
+
+			//lf.lerFicheiroLog(hamDirectory);
+
+			calculateFN(x);
 		}
 
 		if(button.getText().equals("Gerar")){
 			
 			try {
-				antiSpamFilter.init();
+				antiSpamFilter.init(this);
 				lf.lerValoresAutomatico();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -164,30 +169,37 @@ public class ButtonAction {
 			}
 			
 			table = automaticTable;
+			
+			counterFP = (int) lf.getFP();
+			counterFN = (int) lf.getFN();
 		}
 		
 	}
 
 	public void calculateFP(double[] x){
+		
+		counterFP = 0;
+		
 		contaHam = 0;
+
+		lf.fillArray();
 		
-		File f = new File("./rules.cf");
-		JTextField tf = new JTextField(f.getName());
-		lf.createTables(tf);
+		lf.lerFicheiroLog("./ham.log");
 		
-		System.out.println("");
+		rulesList = new ArrayList<>();
+		
 		for(int i = 0; i < lf.getRulesList().size(); i++){
 			Rule rule = new Rule(lf.getRulesList().get(i).getName(), x[i]);
 			rulesList.add(rule);
 		}
-
+		
 		for(int i = 0; i < lf.getLog().size(); i++){
 
 			if(!lf.getLog().get(i).equals("0.0")){
 				String rule = lf.getLog().get(i);
 
 				for(int j = 0; j < x.length; j++){
-					if(rule.equals(rulesList.get(j))){
+					if(rule.equals(rulesList.get(j).getName())){
 						contaHam += (double) x[j];
 					}
 				}
@@ -206,13 +218,18 @@ public class ButtonAction {
 
 		contaSpam = 0;
 		
+		counterFN = 0;
+		
+		lf.lerFicheiroLog("./spam.log");
+		
 		for(int i = 0; i < lf.getLog().size(); i++){
-
+			
 			if(!lf.getLog().get(i).equals("0.0")){
 				String rule = lf.getLog().get(i);
-
+				
 				for(int j = 0; j < rulesList.size(); j++){
-					if(rule.equals(rulesList.get(j))){
+					if(rule.equals(rulesList.get(j).getName())){
+						
 						contaSpam += (double) x[j];
 					}
 				}
@@ -264,6 +281,7 @@ public class ButtonAction {
 	public File getSpam() {
 		return spam;
 	}
+	
 	public File getHam() {
 		return ham;
 	}

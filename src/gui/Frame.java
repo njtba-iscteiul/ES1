@@ -195,7 +195,7 @@ public class Frame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-				buttonAction.gerar(buttonAction.getManualTable(), spamDirectory.getText(), hamDirectory.getText(), counter);
+				buttonAction.gerar(buttonAction.getManualTable(), counter);
 				
 				manualCounterFN = buttonAction.getCounterFN();
 				manualCounterFP = buttonAction.getCounterFP();
@@ -251,11 +251,13 @@ public class Frame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				buttonAction.gerar(buttonAction.getAutomaticTable(), spamDirectory.getText(), hamDirectory.getText(), automaticGenerate);
+				buttonAction.gerar(buttonAction.getAutomaticTable(), automaticGenerate);
 				
 				automaticCounterFN = buttonAction.getCounterFN();
 				automaticCounterFP = buttonAction.getCounterFP();
 			
+				System.out.println("FN: " + buttonAction.getCounterFN() + " FP: " + buttonAction.getCounterFP());
+				
 				automaticFN.setText("False Negative: " + automaticCounterFN);
 				automaticFP.setText("False Positive: " + automaticCounterFP);
 				

@@ -16,6 +16,8 @@ import org.uma.jmetal.util.experiment.component.*;
 import org.uma.jmetal.util.experiment.util.ExperimentAlgorithm;
 import org.uma.jmetal.util.experiment.util.ExperimentProblem;
 
+import funcionalities.ButtonAction;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,11 +26,11 @@ import java.util.List;
 public class AntiSpamFilterAutomaticConfiguration {
   private static final int INDEPENDENT_RUNS = 5 ;
 
-  public void init() throws IOException {
+  public void init(ButtonAction ba) throws IOException {
     String experimentBaseDirectory = "experimentBaseDirectory";
 
     List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
-    problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem()));
+    problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem(ba)));
 
     List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithmList =
             configureAlgorithmList(problemList);
@@ -45,7 +47,7 @@ public class AntiSpamFilterAutomaticConfiguration {
             .setIndependentRuns(INDEPENDENT_RUNS)
             .setNumberOfCores(8)
             .build();
-
+    
     new ExecuteAlgorithms<>(experiment).run();
     new GenerateReferenceParetoSetAndFrontFromDoubleSolutions(experiment).run();
     new ComputeQualityIndicators<>(experiment).run() ;
@@ -63,7 +65,7 @@ public class AntiSpamFilterAutomaticConfiguration {
               problemList.get(i).getProblem(),
               new SBXCrossover(1.0, 5),
               new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-              .setMaxEvaluations(25000)
+              .setMaxEvaluations(700)
               .setPopulationSize(100)
               .build();
       algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));

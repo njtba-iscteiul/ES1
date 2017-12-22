@@ -20,6 +20,8 @@ public class LeitorDeFicheiro {
 	private DefaultTableModel defaultAutomaticTable;
 	private JTable manualTable;
 	private JTable automaticTable;
+	private double fp = 0;
+	private double fn = 0;
 
 	public void createTables(JTextField searchDirectory) {
 
@@ -125,21 +127,62 @@ public class LeitorDeFicheiro {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+		
+		//System.out.println(log.size());
+		
 	}
 	
 	public void lerValoresAutomatico(){
 		
-		File f = new File("./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.NSGAII.rs");
-		
+		File f = new File("./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.NSGAII.rf");
+		double menor = 0;
+		int linha = 1;
+		int contador = 1;
+		String[] split;
 		Scanner sc;
-		valores = new ArrayList<>();
-		String[] parts;
 		
 		try {
 			sc = new Scanner(f);
+			while(sc.hasNextLine()){
+				String line = sc.nextLine();
+				split = line.split(" ");
+				if (contador == 1){
+					menor = Double.parseDouble(split[1]);
+					fp = Double.parseDouble(split[0]);
+					fn = Double.parseDouble(split[1]);
+					linha = contador;
+				}
+				else {
+					if(menor > Double.parseDouble(split[1])){
+						
+						menor = Double.parseDouble(split[1]);
+						fp = Double.parseDouble(split[0]);
+						fn = Double.parseDouble(split[1]);
+						linha = contador;
+					}
+				}
+					
+				contador++;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		File f2 = new File("./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.NSGAII.rs");
+		
+		//Scanner sc;
+		valores = new ArrayList<>();
+		String[] parts = null;
+		String line = null;
+		
+		try {
+			sc = new Scanner(f2);
 
-			System.out.println("");
-			String line = sc.nextLine();
+			while(linha != 0){
+				line = sc.nextLine();
+				linha--;
+			}
+
 			parts = line.split(" ");
 			for(int i = 0; i < parts.length; i++){
 				valores.add(parts[i]);
@@ -148,12 +191,33 @@ public class LeitorDeFicheiro {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}	
+
 	}
 
 	public void fillTable(Rule r) {
 		defaultManualTable.addRow(new Object[] {r.getName(),r.getWeight()});
 		defaultAutomaticTable.addRow(new Object[] {r.getName(),r.getWeight()});
+	}
+	
+	public void fillArray(){
+		
+		rulesList.clear();
+		
+		File f = new File("./rules.cf");
+		
+		try {
+			Scanner sc = new Scanner(f);
+			while(sc.hasNextLine()){
+				String line = sc.nextLine();
+				String[] split = line.split(" ");
+				Rule r = new Rule(split[0], Double.parseDouble(split[1]));
+				rulesList.add(r);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public ArrayList<Rule> getRulesList(){
@@ -178,5 +242,13 @@ public class LeitorDeFicheiro {
 
 	public JTable getAutomaticTable(){
 		return automaticTable;
+	}
+	
+	public double getFP(){
+		return fp;
+	}
+	
+	public double getFN(){
+		return fn;
 	}
 }
